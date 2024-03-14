@@ -42,7 +42,13 @@ onelinebody=obj.get()['Body'].read()
 print(body)
 
 #update file1 with the contenet of file2
-s3.Object(bucket_name, file1).put(Body=open(file2, 'rb'))
+s3.Object(bucket_name, file1).put(Body=open(file2, 'rb'))#file2 is in my pc not in aws
 onelinebody=obj.get()['Body'].read()
 print(onelinebody)
 
+#Delete object
+s3.Object(bucket_name, file1).delete()
+
+#delete bucket
+bucket = s3.Bucket(bucket_name)
+bucket.delete()
