@@ -42,12 +42,19 @@ onelinebody=obj.get()['Body'].read()
 print(body)
 
 #update file1 with the contenet of file2
-s3.Object(bucket_name, file1).put(Body=open(file2, 'rb'))#file2 is in my pc not in aws
+s3.Object(bucket_name, file1).put(Body=open("file2.txt", 'rb'))#file2 is in my pc not in aws
 onelinebody=obj.get()['Body'].read()
 print(onelinebody)
 
 #Delete object
 s3.Object(bucket_name, file1).delete()
+#Delete object into a directory
+objects_to_delete = [] #this list will be full with all the objects with the prefix ListDirectory/ <-(so all file in subdirectory)
+for obj in s3.Bucket(bucket_name).objects.filter(Prefix="ListDirectory/"):
+    objects_to_delete.append({'Key': obj.key})
+
+if objects_to_delete:
+    s3.Bucket(bucket_name).delete_objects(Delete={'Objects': objects_to_delete})
 
 #delete bucket
 bucket = s3.Bucket(bucket_name)
